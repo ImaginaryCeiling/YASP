@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct quarterhourApp: App {
+    @State private var permissionGranted = false
+    
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .task {
+                    permissionGranted = await NotificationManager.shared.requestAuthoirization()
+                }
         }
     }
 }

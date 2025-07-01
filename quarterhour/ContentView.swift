@@ -8,17 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @StateObject private var store = EntryStore()
+    @State private var dayStarted = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+         
+        if dayStarted{
+            LogView()
+                .environmentObject(store)
+        } else {
+            VStack(spacing: 24) {
+                Text("15 Minute Log")
+                    .font(.largeTitle).bold()
+                Button("Start Day"){
+                    store.load()
+                    dayStarted = true
+                    NotificationManager.shared
+                        .schedulePing()
+                }
+                .buttonStyle(.borderedProminent)
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
 }
+
